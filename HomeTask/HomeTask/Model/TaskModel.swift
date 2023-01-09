@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Task: Identifiable {
+struct TaskModel: Identifiable {
     let id = UUID()
     let creationDate = Date()
     let title: String

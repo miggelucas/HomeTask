@@ -9,13 +9,12 @@ import SwiftUI
 
 
 struct TaskListView: View {
-    
     @ObservedObject var viewModel = TaskListViewModel()
+    
     
     var body: some View {
         NavigationStack {
             VStack {
-                
                 switch viewModel.state {
                 case .loading:
                     VStack (alignment: .center) {
@@ -33,14 +32,35 @@ struct TaskListView: View {
                     }
                     
                 }
-                
-                
             }
+            
+            .sheet(isPresented: $viewModel.showingAddNewTaskView) {
+                AddNewTaskView(taskTitle: $viewModel.titleNewTask,
+                               textPlaceholder: $viewModel.textPlaceholder,
+                               actionForAdd: { viewModel.confirmPressed()},
+                               actionForCancel: {
+
+                })
+            }
+            
             .navigationTitle("Atividades")
             .navigationBarTitleDisplayMode(.large)
             .onAppear {
                 viewModel.didAppear()
                 
+            }
+            
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        viewModel.addTaskButtonPressed()
+                        
+                    } label: {
+                        Image(systemName: "plus")
+                        
+                    }
+                    
+                }
             }
         }
     }
