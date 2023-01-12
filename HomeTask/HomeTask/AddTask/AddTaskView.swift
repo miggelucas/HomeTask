@@ -1,5 +1,5 @@
 //
-//  AddNewTaskView.swift
+//  AddTaskView.swift
 //  HomeTask
 //
 //  Created by Lucas Migge de Barros on 30/12/22.
@@ -7,20 +7,16 @@
 
 import SwiftUI
 
-struct AddNewTaskView: View {
+struct AddTaskView: View {
     @Environment(\.dismiss) private var dismiss
     
-    @Binding var taskTitle : String
-    @Binding var textPlaceholder : String
-    var actionForAdd: () -> Void
-    var actionForCancel: () -> Void
-    
-    
+    @ObservedObject var viewModel: AddTaskViewModel
+
     var body: some View {
         NavigationStack {
             Form {
-                Section("Nome") {
-                    TextField(textPlaceholder, text: $taskTitle)
+                Section(viewModel.nameSectionTitle) {
+                    TextField(viewModel.textPlaceholder, text: $viewModel.taskTitle)
                     
                 }
                 
@@ -28,23 +24,29 @@ struct AddNewTaskView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        actionForAdd()
+                        viewModel.didTapAdd()
                         
                     } label: {
-                        Text("Adicionar")
+                        Text(viewModel.addButtonTitle)
                         
                     }
                 }
                 
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        actionForCancel()
-                        dismiss()
+                        viewModel.didTapCancel()
+
                     } label: {
-                        Text("Cancelar")
+                        Text(viewModel.cancelButtonTittle)
                         
                     }
                 }
+            }
+            .onChange(of: viewModel.shouldDismissView) { shouldDismissView in
+                if shouldDismissView {
+                    dismiss()
+                }
+                
             }
         }
     }
@@ -52,11 +54,11 @@ struct AddNewTaskView: View {
 
 
 
-struct AddNewTaskView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddNewTaskView(taskTitle: .constant(""),
-                       textPlaceholder: .constant("Nome da atividade"),
-                       actionForAdd: {},
-                       actionForCancel: {})
-    }
-}
+//struct AddNewTaskView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AddNewTaskView(taskTitle: .constant(""),
+//                       textPlaceholder: .constant("Nome da atividade"),
+//                       actionForAdd: {},
+//                       actionForCancel: {})
+//    }
+//}

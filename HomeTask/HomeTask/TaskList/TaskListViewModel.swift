@@ -8,17 +8,24 @@
 import Foundation
 
 class TaskListViewModel: ObservableObject {
-
+    
     
     enum State {
         case loading, empty, content
     }
+    
+    private let persistence = TaskPersistence()
     
     @Published var tasks: [TaskModel] = []
     @Published var isLoading = true
     @Published var showingAddNewTaskView = false
     @Published var titleNewTask = ""
     @Published var textPlaceholder = "Nome da atividade"
+    
+    var addTaskViewModel: AddTaskViewModel {
+        AddTaskViewModel(persistence: persistence)
+
+    }
     
     var state : State {
         if isLoading {
@@ -34,6 +41,7 @@ class TaskListViewModel: ObservableObject {
     
     func addTaskButtonPressed() {
         showingAddNewTaskView.toggle()
+        
     }
     
     func validateNewTask(forTitle title: String) -> Bool {
@@ -58,23 +66,23 @@ class TaskListViewModel: ObservableObject {
     
     func didAppear() {
         fetchData()
+
+    }
+    
+    func didDismissSheet() {
+        fetchData()
+        isLoading = true
     }
     
     
     private func fetchData() {
-        // simulating fetch remote data
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.tasks = [
-                TaskModel(title: "Tirar o lixo"),
-                TaskModel(title: "Lavar a louça"),
-                TaskModel(title: "Botar a roupa na máquina")
-            ]
-            
-        
-            
+
+        persistence.fetchTaks { tasksReceived in
+            self.tasks = tasksReceived
             self.isLoading = false
         }
-        
+
     }
+    
     
 }
