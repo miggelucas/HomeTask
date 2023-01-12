@@ -50,22 +50,21 @@ class TaskListViewModel: ObservableObject {
     
     func swipeAction(task: TaskItem) {
         persistence.deleteTask(forTask: task) {
-            print("Deletou \(task)")
         }
-        fetchData()
+        self.loadData()
     }
     
     func didAppear() {
-        fetchData()
+        loadData()
     }
     
     func didDismissSheet() {
         isLoading = true
-        fetchData()
+        loadData()
   
     }
     
-    private func fetchData() {
+    private func loadData() {
         persistence.fetchTaks { tasksReceived in
             self.tasks = tasksReceived
             self.isLoading = false

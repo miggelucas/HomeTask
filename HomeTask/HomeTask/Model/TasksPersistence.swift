@@ -80,22 +80,5 @@ class InMemoryTaskPersistence: TaskPersistence {
 
 
 
-// apagar depois hihihi
-// study later
-//    func fetchTaks() async -> [TaskModel] {
-//        print("Antes da operação assync - 2")
-//
-//        let taskArray = [
-//            TaskModel(title: "Tirar o lixo"),
-//            TaskModel(title: "Lavar a louça"),
-//            TaskModel(title: "Botar a roupa na máquina")
-//        ]
-//
-//        print("dentro do assync - 3")
-//
-//        return taskArray
-//    }
-
-
 
 

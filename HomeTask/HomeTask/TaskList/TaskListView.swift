@@ -39,6 +39,7 @@ struct TaskListView: View {
                     }
                 }
             }
+            
             .sheet(isPresented: $viewModel.showingAddNewTaskView, onDismiss: viewModel.didDismissSheet) {
                 AddTaskView(viewModel: viewModel.addTaskViewModel)
             }
@@ -46,7 +47,8 @@ struct TaskListView: View {
             .navigationTitle("Atividades")
             .navigationBarTitleDisplayMode(.large)
             .onAppear {
-                viewModel.didAppear()            }
+                viewModel.didAppear()
+            }
             
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
