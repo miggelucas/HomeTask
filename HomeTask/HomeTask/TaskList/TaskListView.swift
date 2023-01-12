@@ -27,13 +27,18 @@ struct TaskListView: View {
                     }
                     
                 case .content:
-                    List(viewModel.tasks) { task in
-                        Text(task.title)
+                    List {
+                        ForEach(viewModel.tasks) { task in
+                            Text(task.name ?? "no name")
+                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                    Button("Excluir", role: .destructive) {
+                                        viewModel.swipeAction(task: task)
+                                    }
+                                }
+                        }
                     }
-                    
                 }
             }
-            
             .sheet(isPresented: $viewModel.showingAddNewTaskView, onDismiss: viewModel.didDismissSheet) {
                 AddTaskView(viewModel: viewModel.addTaskViewModel)
             }
@@ -41,9 +46,7 @@ struct TaskListView: View {
             .navigationTitle("Atividades")
             .navigationBarTitleDisplayMode(.large)
             .onAppear {
-                viewModel.didAppear()
-                
-            }
+                viewModel.didAppear()            }
             
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -60,6 +63,7 @@ struct TaskListView: View {
         }
     }
 }
+
 
 struct TaskListView_Previews: PreviewProvider {
     static var previews: some View {

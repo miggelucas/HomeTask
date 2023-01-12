@@ -23,19 +23,19 @@ class AddTaskViewModel: ObservableObject {
     @Published var cancelButtonTittle = "Cancelar"
 
     
+    func validateNewTask(forTitle title: String) -> Bool {
+        return !title.isEmpty
+        
+    }
+    
     func didTapAdd() {
-        
-        guard !taskTitle.isEmpty else { textPlaceholder =  "A atividade precisa ter um nome"
-            return
-        }
-        
-        let newTask = TaskModel(title: taskTitle)
-        
-        persistence.saveTask(forTask: newTask) {
-            print("Salvou")
-            self.shouldDismissView.toggle()
-            
-            
+
+        if validateNewTask(forTitle: taskTitle) {
+            persistence.saveTask(taskTitle: taskTitle) {
+                print("Salvou")
+                self.shouldDismissView.toggle()
+
+            }
         }
     }
     
