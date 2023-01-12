@@ -34,13 +34,8 @@ struct TaskListView: View {
                 }
             }
             
-            .sheet(isPresented: $viewModel.showingAddNewTaskView) {
-                AddNewTaskView(taskTitle: $viewModel.titleNewTask,
-                               textPlaceholder: $viewModel.textPlaceholder,
-                               actionForAdd: { viewModel.confirmPressed()},
-                               actionForCancel: {
-
-                })
+            .sheet(isPresented: $viewModel.showingAddNewTaskView, onDismiss: viewModel.didDismissSheet) {
+                AddTaskView(viewModel: viewModel.addTaskViewModel)
             }
             
             .navigationTitle("Atividades")
