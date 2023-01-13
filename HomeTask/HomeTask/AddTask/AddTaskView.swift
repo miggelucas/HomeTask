@@ -53,12 +53,11 @@ struct AddTaskView: View {
 }
 
 
-
-//struct AddNewTaskView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AddNewTaskView(taskTitle: .constant(""),
-//                       textPlaceholder: .constant("Nome da atividade"),
-//                       actionForAdd: {},
-//                       actionForCancel: {})
-//    }
-//}
+ 
+struct AddNewTaskView_Previews: PreviewProvider {
+    static var persistence = InMemoryTaskPersistence()
+    static var viewModel = AddTaskViewModel(persistence: persistence)
+    static var previews: some View {
+       AddTaskView(viewModel: viewModel) 
+    }
+}

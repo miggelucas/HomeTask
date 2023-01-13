@@ -40,7 +40,7 @@ class AddTaskViewModel: ObservableObject {
     }
     
     func didTapCancel() {
-        
+        shouldDismissView.toggle()
     }
     
     
