@@ -8,11 +8,10 @@
 import Foundation
 
 class AddTaskViewModel: ObservableObject {
-    let persistence : TaskPersistence
+
     
-    init(persistence: TaskPersistence) {
-        self.persistence = persistence
-    }
+    let coreDataManager = CoreDataManager.shared
+    
     
     @Published var taskTitle: String = ""
     @Published var textPlaceholder = "Nome da atividade"
@@ -31,7 +30,7 @@ class AddTaskViewModel: ObservableObject {
     func didTapAdd() {
 
         if validateNewTask(forTitle: taskTitle) {
-            persistence.saveTask(taskTitle: taskTitle) {
+            coreDataManager.saveTask(taskTitle: taskTitle) {
                 print("Salvou")
                 self.shouldDismissView.toggle()
 

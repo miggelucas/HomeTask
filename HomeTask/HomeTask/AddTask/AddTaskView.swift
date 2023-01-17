@@ -55,9 +55,8 @@ struct AddTaskView: View {
 
  
 struct AddNewTaskView_Previews: PreviewProvider {
-    static var persistence = InMemoryTaskPersistence()
-    static var viewModel = AddTaskViewModel(persistence: persistence)
+    static var viewModel = AddTaskViewModel()
     static var previews: some View {
-       AddTaskView(viewModel: viewModel) 
+       AddTaskView(viewModel: viewModel)
     }
 }

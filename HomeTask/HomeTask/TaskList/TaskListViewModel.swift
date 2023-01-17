@@ -14,7 +14,7 @@ class TaskListViewModel: ObservableObject {
         case loading, empty, content
     }
     
-    private let persistence : TaskPersistence
+    let coreDataManager = CoreDataManager.shared
     
     @Published var tasks: [TaskItem] = []
     @Published var isLoading = true
@@ -23,13 +23,10 @@ class TaskListViewModel: ObservableObject {
     @Published var textPlaceholder = "Nome da atividade"
     
     var addTaskViewModel: AddTaskViewModel {
-        AddTaskViewModel(persistence: persistence)
+        AddTaskViewModel()
 
     }
     
-    init(persistence: TaskPersistence = InMemoryTaskPersistence()) {
-        self.persistence = persistence
-    }
     
     var state : State {
         if isLoading {
@@ -49,7 +46,7 @@ class TaskListViewModel: ObservableObject {
     }
     
     func swipeAction(task: TaskItem) {
-        persistence.deleteTask(forTask: task) {
+        coreDataManager.deleteTask(forTask: task) {
         }
         self.loadData()
     }
@@ -65,7 +62,7 @@ class TaskListViewModel: ObservableObject {
     }
     
     private func loadData() {
-        persistence.fetchTaks { tasksReceived in
+        coreDataManager.fetchTaks { tasksReceived in
             self.tasks = tasksReceived
             self.isLoading = false
         }

@@ -18,13 +18,19 @@ protocol TaskPersistence {
 }
 
 
-class InMemoryTaskPersistence: TaskPersistence {
+class CoreDataManager: TaskPersistence {
     
-    private var taskArray: [TaskItem] = []
+    static var shared = CoreDataManager()
     
-    let container = NSPersistentContainer(name: "TaskItem")
+    let container: NSPersistentContainer
     
+    var viewContext: NSManagedObjectContext {
+        container.viewContext
+    }
+    
+   
     init() {
+        container = NSPersistentContainer(name: "TaskItem")
         container.loadPersistentStores { description, error in
             if let error = error {
                 print("Core Data failed to load: \(error.localizedDescription)")
@@ -36,14 +42,15 @@ class InMemoryTaskPersistence: TaskPersistence {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             
             let fetchRequest: NSFetchRequest<TaskItem> = TaskItem.fetchRequest()
+            var taskArray: [TaskItem] = []
             
             do {
-                self.taskArray = try self.container.viewContext.fetch(fetchRequest)
+                taskArray = try self.viewContext.fetch(fetchRequest)
             } catch {
                 print("Error fetching data from context \(error)")
             }
             
-            completion(self.taskArray)
+            completion(taskArray)
         }
         
         
@@ -56,7 +63,7 @@ class InMemoryTaskPersistence: TaskPersistence {
         taskContext.creationDate = Date()
         
         do {
-            try container.viewContext.save()
+            try viewContext.save()
         } catch {
             print("Error saving data to context \(error)")
         }
@@ -64,11 +71,11 @@ class InMemoryTaskPersistence: TaskPersistence {
     }
     
     func deleteTask(forTask task: TaskItem, completion: @escaping () -> Void) {
-        container.viewContext.delete(task)
+        viewContext.delete(task)
         
-        if container.viewContext.hasChanges {
+        if viewContext.hasChanges {
             do {
-                try container.viewContext.save()
+                try viewContext.save()
             } catch {
                 print("Error deleting data from context \(error)")
             }
