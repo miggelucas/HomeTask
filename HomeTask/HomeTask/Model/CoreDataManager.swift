@@ -18,7 +18,7 @@ protocol TaskPersistence {
 }
 
 
-class CoreDataManager: TaskPersistence {
+class CoreDataTaskPersistence: TaskPersistence {
     
     static var shared = CoreDataManager()
     
