@@ -45,7 +45,7 @@ class TaskListViewModel: ObservableObject {
         
     }
     
-    func swipeAction(task: TaskItem) {
+    func didSwipe(on taskItem: TaskItem) {
         coreDataManager.deleteTask(forTask: task) {
         }
         self.loadData()
