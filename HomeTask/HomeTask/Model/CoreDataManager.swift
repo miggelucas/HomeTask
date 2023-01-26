@@ -10,11 +10,11 @@ import CoreData
 
 
 protocol TaskPersistence {
-    func fetchTaks(completion: @escaping ([TaskItem]) -> Void)
+    func fetchTasks(completion: @escaping ([TaskItem]) -> Void)
     
-    func saveTask(taskTitle: String, completion: @escaping () -> Void)
+    func saveTask(withTitle taskTitle: String, completion: @escaping () -> Void)
     
-    func deleteTask(forTask task: TaskItem, completion: @escaping () -> Void)
+    func delete(task: TaskItem, completion: @escaping () -> Void)
 }
 
 
