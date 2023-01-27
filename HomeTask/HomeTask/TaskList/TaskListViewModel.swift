@@ -9,22 +9,34 @@ import Foundation
 
 class TaskListViewModel: ObservableObject {
     
+    struct TaskView: Identifiable, Equatable {
+        let name: String
+        let id: UUID
+        let creationDate: Date
+    }
     
     enum State {
         case loading, empty, content
     }
     
-    private let persistence = TaskPersistence()
+    private let taskPersistence: TaskPersistence
     
-    @Published var tasks: [TaskModel] = []
+    @Published var tasks: [TaskItem] = []
+    var taskItemView: [TaskView] {
+        self.tasks.map { item in
+            return TaskView(name: item.name ?? "Sem nome",
+                            id: item.id ?? UUID(),
+                            creationDate: item.creationDate ?? Date())
+        }
+    }
     @Published var isLoading = true
     @Published var showingAddNewTaskView = false
     @Published var titleNewTask = ""
     @Published var textPlaceholder = "Nome da atividade"
     
-    var addTaskViewModel: AddTaskViewModel {
-        AddTaskViewModel(persistence: persistence)
-
+    
+    init(taskPersistence: TaskPersistence = CoreDataTaskPersistence()) {
+        self.taskPersistence = taskPersistence
     }
     
     var state : State {
@@ -40,48 +52,46 @@ class TaskListViewModel: ObservableObject {
     }
     
     func addTaskButtonPressed() {
-        showingAddNewTaskView.toggle()
+        showingAddNewTaskView = true
         
     }
     
-    func validateNewTask(forTitle title: String) -> Bool {
-        return title.count > 1
-        
-    }
-    
-    func confirmPressed() {
-        let newTask = TaskModel(title: titleNewTask)
-        
-        if validateNewTask(forTitle: newTask.title) {
-            self.tasks.append(newTask)
-            showingAddNewTaskView.toggle()
-            titleNewTask = ""
-            textPlaceholder = "Nome da atividade"
-            
-        } else {
-            textPlaceholder = "A atividade precisa ter um nome"
-            
+    func didSwipe(on task: TaskView) {
+        guard let index = taskItemView.firstIndex(of: task) else { return }
+        let taskToBeRemoved = tasks[index]
+        taskPersistence.deleteTask(forTask: taskToBeRemoved) { result in
+            switch result {
+            case .success(let taskArrayRecived):
+                self.tasks = taskArrayRecived
+                
+            case .failure(let error):
+                print("Failed to delete task: \(error)")
+            }
         }
     }
     
     func didAppear() {
-        fetchData()
-
+        loadData()
     }
     
     func didDismissSheet() {
-        fetchData()
         isLoading = true
+        loadData()
+        
     }
     
-    
-    private func fetchData() {
-
-        persistence.fetchTaks { tasksReceived in
-            self.tasks = tasksReceived
-            self.isLoading = false
+    private func loadData() {
+        taskPersistence.fetchTaks { result in
+            
+            switch result {
+            case .success(let taskArray):
+                self.tasks = taskArray
+                self.isLoading = false
+                
+            case .failure(let error):
+                print("failed to load data: \(error)")
+            }
         }
-
     }
     
     

@@ -8,11 +8,13 @@
 import Foundation
 
 class AddTaskViewModel: ObservableObject {
-    let persistence : TaskPersistence
+
+    private let taskPersistence: TaskPersistence
     
-    init(persistence: TaskPersistence) {
-        self.persistence = persistence
+    init(taskPersistence: TaskPersistence = CoreDataTaskPersistence()) {
+        self.taskPersistence = taskPersistence
     }
+    
     
     @Published var taskTitle: String = ""
     @Published var textPlaceholder = "Nome da atividade"
@@ -23,24 +25,28 @@ class AddTaskViewModel: ObservableObject {
     @Published var cancelButtonTittle = "Cancelar"
 
     
-    func didTapAdd() {
-        
-        guard !taskTitle.isEmpty else { textPlaceholder =  "A atividade precisa ter um nome"
-            return
+    func isTaskTitleValid(_ title: String) -> Bool {
+        if !title.isEmpty && title.count > 3 {
+            return true
+        } else {
+            return false
         }
         
-        let newTask = TaskModel(title: taskTitle)
-        
-        persistence.saveTask(forTask: newTask) {
-            print("Salvou")
-            self.shouldDismissView.toggle()
-            
-            
+    }
+    
+    func didTapAdd() {
+
+        if isTaskTitleValid(taskTitle) {
+            taskPersistence.saveTask(withTitle: taskTitle) {
+                print("Salvou")
+                self.shouldDismissView = true
+
+            }
         }
     }
     
     func didTapCancel() {
-        
+        shouldDismissView.toggle()
     }
     
     
