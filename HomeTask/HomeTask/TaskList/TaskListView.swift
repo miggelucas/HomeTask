@@ -42,7 +42,7 @@ struct TaskListView: View {
             }
             
             .sheet(isPresented: $viewModel.showingAddNewTaskView, onDismiss: viewModel.didDismissSheet) {
-                AddTaskView()
+                AddTaskView( )
             }
             
             .navigationTitle("Atividades")

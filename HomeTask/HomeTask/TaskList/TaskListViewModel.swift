@@ -59,8 +59,14 @@ class TaskListViewModel: ObservableObject {
     func didSwipe(on task: TaskView) {
         guard let index = taskItemView.firstIndex(of: task) else { return }
         let taskToBeRemoved = tasks[index]
-        taskPersistence.deleteTask(forTask: taskToBeRemoved) {
-            self.loadData()
+        taskPersistence.deleteTask(forTask: taskToBeRemoved) { result in
+            switch result {
+            case .success(let taskArrayRecived):
+                self.tasks = taskArrayRecived
+                
+            case .failure(let error):
+                print("Failed to delete task: \(error)")
+            }
         }
     }
     

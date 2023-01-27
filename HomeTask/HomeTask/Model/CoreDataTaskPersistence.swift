@@ -14,7 +14,7 @@ protocol TaskPersistence {
     
     func saveTask(withTitle taskTitle: String, completion: @escaping () -> Void)
     
-    func deleteTask(forTask task: TaskItem, completion: @escaping () -> Void)
+    func deleteTask(forTask task: TaskItem, completion: @escaping (Result<[TaskItem], Error>) -> Void)
 }
 
 
@@ -69,18 +69,32 @@ class CoreDataTaskPersistence: TaskPersistence {
         completion()
     }
     
-    func deleteTask(forTask task: TaskItem, completion: @escaping () -> Void) {
+    func deleteTask(forTask task: TaskItem, completion: @escaping (Result<[TaskItem], Error>) -> Void) {
         viewContext.delete(task)
         
         if viewContext.hasChanges {
             do {
                 try viewContext.save()
             } catch {
-                print("Error deleting data from context \(error)")
+                // if failed to save changes
+                completion(.failure(error))
+//                print("Error deleting data from context \(error)")
             }
+            
+            let fetchRequest: NSFetchRequest<TaskItem> = TaskItem.fetchRequest()
+            var taskArray: [TaskItem] = []
+            
+            do {
+                taskArray = try self.viewContext.fetch(fetchRequest)
+            } catch {
+                completion(.failure(error))
+            }
+            
+            completion(.success(taskArray))
+            
+            
         }
-        completion()
-        
+
     }
 }
 
