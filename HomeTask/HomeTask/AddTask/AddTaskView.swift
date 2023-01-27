@@ -10,7 +10,7 @@ import SwiftUI
 struct AddTaskView: View {
     @Environment(\.dismiss) private var dismiss
     
-    @ObservedObject var viewModel: AddTaskViewModel
+    @ObservedObject var viewModel = AddTaskViewModel()
 
     var body: some View {
         NavigationStack {

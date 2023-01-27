@@ -9,8 +9,8 @@ import SwiftUI
 
 
 struct TaskListView: View {
+   
     @ObservedObject var viewModel = TaskListViewModel()
-    
     
     var body: some View {
         NavigationStack {
@@ -28,20 +28,21 @@ struct TaskListView: View {
                     
                 case .content:
                     List {
-                        ForEach(viewModel.tasks) { task in
-                            Text(task.name ?? "no name")
+                        ForEach(viewModel.taskItemView) { task in
+                            Text(task.name)
                                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                                     Button("Excluir", role: .destructive) {
-                                        viewModel.swipeAction(task: task)
+                                        viewModel.didSwipe(on: task)
                                     }
                                 }
                         }
+                       
                     }
                 }
             }
             
             .sheet(isPresented: $viewModel.showingAddNewTaskView, onDismiss: viewModel.didDismissSheet) {
-                AddTaskView(viewModel: viewModel.addTaskViewModel)
+                AddTaskView()
             }
             
             .navigationTitle("Atividades")

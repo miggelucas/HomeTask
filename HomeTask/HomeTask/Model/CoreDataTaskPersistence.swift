@@ -10,17 +10,17 @@ import CoreData
 
 
 protocol TaskPersistence {
-    func fetchTasks(completion: @escaping ([TaskItem]) -> Void)
+    func fetchTaks(completion: @escaping ([TaskItem]) -> Void)
     
     func saveTask(withTitle taskTitle: String, completion: @escaping () -> Void)
     
-    func delete(task: TaskItem, completion: @escaping () -> Void)
+    func deleteTask(forTask task: TaskItem, completion: @escaping () -> Void)
 }
 
 
 class CoreDataTaskPersistence: TaskPersistence {
     
-    static var shared = CoreDataManager()
+    static var shared = CoreDataTaskPersistence()
     
     let container: NSPersistentContainer
     
@@ -28,10 +28,9 @@ class CoreDataTaskPersistence: TaskPersistence {
         container.viewContext
     }
     
-   
-    init() {
-        container = NSPersistentContainer(name: "TaskItem")
-        container.loadPersistentStores { description, error in
+    init(container: NSPersistentContainer = NSPersistentContainer(name: "TaskItem")) {
+        self.container = container
+        self.container.loadPersistentStores { description, error in
             if let error = error {
                 print("Core Data failed to load: \(error.localizedDescription)")
             }
@@ -56,7 +55,7 @@ class CoreDataTaskPersistence: TaskPersistence {
         
     }
     
-    func saveTask(taskTitle: String, completion: @escaping () -> Void) {
+    func saveTask(withTitle taskTitle: String, completion: @escaping () -> Void) {
         let taskContext = TaskItem(context: container.viewContext)
         taskContext.name = taskTitle
         taskContext.id = UUID()

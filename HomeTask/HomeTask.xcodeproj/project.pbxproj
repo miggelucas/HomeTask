@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1723B963296F74F4001C063B /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1723B962296F74F4001C063B /* CoreDataManager.swift */; };
+		1723B963296F74F4001C063B /* CoreDataTaskPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1723B962296F74F4001C063B /* CoreDataTaskPersistence.swift */; };
 		1723B965296F82FA001C063B /* AddTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1723B964296F82FA001C063B /* AddTaskViewModel.swift */; };
 		1723B969296FC176001C063B /* TaskItem.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1723B967296FC176001C063B /* TaskItem.xcdatamodeld */; };
 		17BFB9AE295F7169000020C5 /* HomeTaskApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BFB9AD295F7169000020C5 /* HomeTaskApp.swift */; };
@@ -21,7 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1723B962296F74F4001C063B /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		1723B962296F74F4001C063B /* CoreDataTaskPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataTaskPersistence.swift; sourceTree = "<group>"; };
 		1723B964296F82FA001C063B /* AddTaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewModel.swift; sourceTree = "<group>"; };
 		1723B968296FC176001C063B /* Task.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Task.xcdatamodel; sourceTree = "<group>"; };
 		17BFB9AA295F7169000020C5 /* HomeTask.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HomeTask.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,7 +107,7 @@
 			children = (
 				1723B967296FC176001C063B /* TaskItem.xcdatamodeld */,
 				17BFB9C0295F75BB000020C5 /* TaskModel.swift */,
-				1723B962296F74F4001C063B /* CoreDataManager.swift */,
+				1723B962296F74F4001C063B /* CoreDataTaskPersistence.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -186,7 +186,7 @@
 				17BFB9C1295F75BB000020C5 /* TaskModel.swift in Sources */,
 				17BFB9B0295F7169000020C5 /* ContentView.swift in Sources */,
 				17BFB9C3295F8ED6000020C5 /* TaskListViewModel.swift in Sources */,
-				1723B963296F74F4001C063B /* CoreDataManager.swift in Sources */,
+				1723B963296F74F4001C063B /* CoreDataTaskPersistence.swift in Sources */,
 				17BFB9AE295F7169000020C5 /* HomeTaskApp.swift in Sources */,
 				1723B969296FC176001C063B /* TaskItem.xcdatamodeld in Sources */,
 				1723B965296F82FA001C063B /* AddTaskViewModel.swift in Sources */,

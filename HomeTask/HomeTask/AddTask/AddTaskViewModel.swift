@@ -9,8 +9,11 @@ import Foundation
 
 class AddTaskViewModel: ObservableObject {
 
+    private let taskPersistence: TaskPersistence
     
-    let coreDataManager = CoreDataManager.shared
+    init(taskPersistence: TaskPersistence = CoreDataTaskPersistence()) {
+        self.taskPersistence = taskPersistence
+    }
     
     
     @Published var taskTitle: String = ""
@@ -22,17 +25,21 @@ class AddTaskViewModel: ObservableObject {
     @Published var cancelButtonTittle = "Cancelar"
 
     
-    func validateNewTask(forTitle title: String) -> Bool {
-        return !title.isEmpty
+    func isTaskTitleValid(_ title: String) -> Bool {
+        if !title.isEmpty && title.count > 3 {
+            return true
+        } else {
+            return false
+        }
         
     }
     
     func didTapAdd() {
 
-        if validateNewTask(forTitle: taskTitle) {
-            coreDataManager.saveTask(taskTitle: taskTitle) {
+        if isTaskTitleValid(taskTitle) {
+            taskPersistence.saveTask(withTitle: taskTitle) {
                 print("Salvou")
-                self.shouldDismissView.toggle()
+                self.shouldDismissView = true
 
             }
         }
