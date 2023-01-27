@@ -10,7 +10,7 @@ import CoreData
 
 
 protocol TaskPersistence {
-    func fetchTaks(completion: @escaping ([TaskItem]) -> Void)
+    func fetchTaks(completion: @escaping (Result<[TaskItem], Error>) -> Void)
     
     func saveTask(withTitle taskTitle: String, completion: @escaping () -> Void)
     
@@ -37,7 +37,7 @@ class CoreDataTaskPersistence: TaskPersistence {
         }
     }
     
-    func fetchTaks(completion: @escaping ([TaskItem]) -> Void) {
+    func fetchTaks(completion: @escaping (Result<[TaskItem], Error>) -> Void) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             
             let fetchRequest: NSFetchRequest<TaskItem> = TaskItem.fetchRequest()
@@ -46,10 +46,10 @@ class CoreDataTaskPersistence: TaskPersistence {
             do {
                 taskArray = try self.viewContext.fetch(fetchRequest)
             } catch {
-                print("Error fetching data from context \(error)")
+                completion(.failure(error))
             }
             
-            completion(taskArray)
+            completion(.success(taskArray))
         }
         
         

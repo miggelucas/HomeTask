@@ -75,9 +75,16 @@ class TaskListViewModel: ObservableObject {
     }
     
     private func loadData() {
-        taskPersistence.fetchTaks { tasksReceived in
-            self.tasks = tasksReceived
-            self.isLoading = false
+        taskPersistence.fetchTaks { result in
+            
+            switch result {
+            case .success(let taskArray):
+                self.tasks = taskArray
+                self.isLoading = false
+                
+            case .failure(let error):
+                print("failed to load data: \(error)")
+            }
         }
     }
     
